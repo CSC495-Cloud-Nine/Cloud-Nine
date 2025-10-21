@@ -1,0 +1,1 @@
+This folder is for all kubernetes yaml files
