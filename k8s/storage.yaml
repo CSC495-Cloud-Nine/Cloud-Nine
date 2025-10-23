@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: storage
+      app: MiniIO
 template:
     metadata:
       labels:
-        app: storage
+        app: MiniIO
     spec:
       containers:
       - name: storage
@@ -25,7 +25,7 @@ metadata:
   name: storage-svc
 spec:
   selector:
-    app: storage
+    app: MiniIO
   ports:
   - port: 80
     targetPort: 8080
