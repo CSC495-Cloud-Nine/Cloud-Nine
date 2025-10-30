@@ -1,0 +1,149 @@
+<!--
+Login page copied from `cloud_9_streaming_login_page.html` to provide a simple filename `login.html`
+Place this file in the same folder as `cloud9-logo.png` and `cloud 9 home page.html`.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cloud9 Streaming — Sign in</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --c9-blue:#078fef; /* cloud blue */
+      --c9-deep:#0d4473; /* deep accent */
+      --ink:#101828;     /* dark text */
+      --muted:#667085;   /* muted text */
+      --ring:#84caff;    /* focus ring */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      color:var(--ink);
+      background: radial-gradient(1000px 700px at 80% -10%, #7cc8ff33, transparent),
+                  radial-gradient(900px 600px at -10% 110%, #1685d622, transparent),
+                  linear-gradient(180deg, #f7fbff, #eef6ff);
+    }
+    .container{
+      min-height:100%;
+      display:grid; place-items:center; padding:32px;
+    }
+    .card{
+      width:100%; max-width:440px; background:#fff; border-radius:20px;
+      box-shadow: 0 10px 30px rgba(13,68,115,.10), 0 2px 6px rgba(16,24,40,.06);
+      overflow:hidden; border:1px solid #e6eef7;
+    }
+    .brand{
+      display:flex; flex-direction:column; align-items:center; gap:10px;
+      padding:28px 24px 8px;
+    }
+    .brand img{ width:86px; height:auto; display:block; }
+    .brand h1{ margin:0; font-size:22px; font-weight:800; letter-spacing:.3px; }
+    .brand .tag{ color:var(--muted); font-size:13px; margin-top:-2px; }
+
+    .content{ padding:20px 24px 28px; }
+    form{ display:grid; gap:14px; }
+
+    label{ font-weight:600; font-size:13px; color:#0f172a; }
+    .field{ position:relative; }
+    input[type="text"], input[type="email"], input[type="password"]{
+      width:100%; padding:12px 14px; border-radius:12px; border:1px solid #d0d5dd; font-size:14px;
+      outline:none; background:#fff;
+      transition:border-color .2s ease, box-shadow .2s ease;
+    }
+    input:focus{
+      border-color:var(--c9-blue);
+      box-shadow:0 0 0 3px var(--ring);
+    }
+
+    .row{ display:flex; justify-content:space-between; align-items:center; gap:10px; }
+    .checkbox{ display:flex; align-items:center; gap:10px; font-size:13px; color:var(--muted); }
+    .checkbox input{ width:16px; height:16px; }
+
+    .actions{ display:grid; gap:10px; margin-top:6px; }
+    button{
+      appearance:none; border:none; cursor:pointer; padding:12px 16px; border-radius:12px;
+      font-weight:700; font-size:15px; letter-spacing:.2px; color:#fff; background:linear-gradient(180deg, #1aa0ff, var(--c9-blue));
+      box-shadow:0 6px 16px rgba(22,133,214,.35), 0 2px 4px rgba(13,68,115,.18);
+      transition: transform .05s ease, box-shadow .2s ease;
+    }
+    button:hover{ box-shadow:0 8px 22px rgba(22,133,214,.45); }
+    button:active{ transform: translateY(1px); }
+
+    .link{ color:var(--c9-deep); text-decoration:none; font-weight:600; font-size:13px; }
+    .link:hover{ text-decoration:underline; }
+
+    .divider{ display:flex; align-items:center; gap:10px; color:var(--muted); font-size:12px; margin:10px 0; }
+    .divider::before,.divider::after{ content:""; height:1px; flex:1; background:#e6eef7; }
+
+    .footer{ text-align:center; color:#98a2b3; font-size:12px; padding:12px 0 20px; }
+
+    @media (max-width:480px){
+      .card{border-radius:16px}
+      .brand img{ width:72px }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="card" role="region" aria-labelledby="signin-title">
+      <div class="brand">
+        <img src="cloud9-logo.png" alt="Cloud9 Streaming Logo" />
+        <h1 id="signin-title">Cloud9 Streaming</h1>
+        <div class="tag">Sign in to your dashboard</div>
+      </div>
+      <div class="content">
+        <form id="loginForm" novalidate>
+          <div class="field">
+            <label for="email">Username or Email</label>
+            <input id="email" name="email" type="text" placeholder="you@cloud9.com" autocomplete="username" required />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" placeholder="********" autocomplete="current-password" required />
+          </div>
+
+          <div class="row">
+            <label class="checkbox"><input id="remember" type="checkbox"/> Remember me</label>
+            <a href="#" class="link" id="forgot">Forgot password?</a>
+          </div>
+
+          <div class="actions">
+            <button type="submit">Sign in</button>
+          </div>
+        </form>
+
+        <div class="divider">or</div>
+        <div class="row" style="justify-content:center;">
+          <a class="link" href="register.html" id="create">Create an account</a>
+        </div>
+      </div>
+      <div class="footer">© <span id="year"></span> Cloud9 Streaming. All rights reserved.</div>
+    </section>
+  </main>
+
+  <script>
+    const yearEl = document.getElementById('year');
+    yearEl.textContent = new Date().getFullYear();
+
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email');
+      const pw = document.getElementById('password');
+
+      if(!email.value.trim() || !pw.value.trim()){
+        alert('Please enter your username/email and password.');
+        return;
+      }
+      // Demo only: replace with real auth call.
+      alert(`Welcome to Cloud9, ${email.value}! (Demo login)`);
+      form.reset();
+    });
+  </script>
+</body>
+</html>
