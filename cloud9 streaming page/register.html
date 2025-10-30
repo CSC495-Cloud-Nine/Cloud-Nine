@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cloud9 Streaming — Create account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{ --c9-blue:#078fef; --c9-deep:#0d4473; --ink:#101828; --muted:#667085; --ring:#84caff; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif; color:var(--ink);
+      background: radial-gradient(1000px 700px at 80% -10%, #7cc8ff33, transparent), radial-gradient(900px 600px at -10% 110%, #1685d622, transparent), linear-gradient(180deg, #f7fbff, #eef6ff);
+    }
+    .container{min-height:100%; display:grid; place-items:center; padding:24px}
+    .card{width:100%; max-width:520px; background:#fff; border-radius:18px; border:1px solid #e6eef7; box-shadow:0 10px 30px rgba(13,68,115,.08); overflow:hidden}
+    .brand{display:flex; gap:12px; align-items:center; padding:22px}
+    .brand img{width:64px}
+    h1{font-size:20px; margin:0}
+    .content{padding:18px 22px 28px}
+    form{display:grid; gap:12px}
+    .row{display:flex; gap:12px}
+    .col{flex:1}
+    label{font-weight:600; font-size:13px}
+    input{width:100%; padding:10px 12px; border-radius:10px; border:1px solid #d0d5dd; font-size:14px}
+    input:focus{outline:none; box-shadow:0 0 0 3px var(--ring); border-color:var(--c9-blue)}
+    .actions{display:flex; gap:10px; margin-top:6px}
+    button{background:linear-gradient(180deg,#1aa0ff,var(--c9-blue)); color:#fff; border:none; padding:10px 14px; border-radius:10px; font-weight:700}
+    .note{font-size:13px; color:var(--muted)}
+    .success{color:green}
+    .error{color:#c92a2a}
+    @media (max-width:520px){ .row{flex-direction:column} .brand img{width:56px} }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="card" aria-labelledby="register-title">
+      <div class="brand">
+        <img src="cloud9-logo.png" alt="Cloud9 logo">
+        <div>
+          <h1 id="register-title">Create your Cloud9 account</h1>
+          <div class="note">Enter basic info and create login credentials</div>
+        </div>
+      </div>
+      <div class="content">
+        <form id="registerForm" novalidate>
+          <div class="row">
+            <div class="col">
+              <label for="firstName">First name</label>
+              <input id="firstName" name="firstName" required />
+            </div>
+            <div class="col">
+              <label for="lastName">Last name</label>
+              <input id="lastName" name="lastName" required />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <label for="age">Age</label>
+              <input id="age" name="age" type="number" min="1" max="120" required />
+            </div>
+            <div class="col">
+              <label for="email">Email / Username</label>
+              <input id="email" name="email" type="email" placeholder="you@cloud9.com" required />
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <label for="password">Password</label>
+              <input id="password" name="password" type="password" placeholder="••••••••" required />
+            </div>
+            <div class="col">
+              <label for="password2">Confirm password</label>
+              <input id="password2" name="password2" type="password" placeholder="••••••••" required />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button type="submit">Create account</button>
+            <a href="login.html" style="align-self:center; color:var(--c9-deep); font-weight:600; text-decoration:none">Back to sign in</a>
+          </div>
+          <div id="message" role="status" aria-live="polite"></div>
+        </form>
+        <hr style="margin:14px 0;border:none;border-top:1px solid #eef6ff">
+        <div class="note">Note: This page will POST to <code>http://localhost:3000/api/register</code>. If the backend is not running, the credential will be saved to localStorage as a temporary fallback. Provide a database later and wire it up to the backend (instructions in backend/README.md).</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById('registerForm');
+    const msg = document.getElementById('message');
+
+    async function saveToBackend(data){
+      try{
+        const res = await fetch('http://localhost:3000/api/register', {
+          method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)
+        });
+        if(!res.ok){
+          const text = await res.text();
+          throw new Error(text || 'Server error');
+        }
+        return await res.json();
+      }catch(err){
+        throw err;
+      }
+    }
+
+    function saveToLocal(data){
+      const key = 'cloud9_demo_users';
+      const existing = JSON.parse(localStorage.getItem(key) || '[]');
+      existing.push(Object.assign({}, data, {createdAt:new Date().toISOString()}));
+      localStorage.setItem(key, JSON.stringify(existing));
+    }
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      msg.textContent=''; msg.className='';
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const age = Number(document.getElementById('age').value);
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const password = document.getElementById('password').value;
+      const password2 = document.getElementById('password2').value;
+
+      if(!firstName || !lastName || !email || !password){ msg.textContent='Please fill all required fields.'; msg.className='error'; return; }
+      if(password !== password2){ msg.textContent='Passwords do not match.'; msg.className='error'; return; }
+      if(age && (age < 1 || age > 120)){ msg.textContent='Please enter a valid age.'; msg.className='error'; return; }
+
+      const payload = { firstName, lastName, age, email };
+
+      // For security, we don't send plain password unless over HTTPS in production.
+      // This demo will send password to local backend over http for convenience.
+      payload.password = password;
+
+      msg.textContent = 'Creating account...';
+
+      try{
+        const result = await saveToBackend(payload);
+        msg.textContent = result && result.message ? result.message : 'Account created successfully.';
+        msg.className = 'success';
+        form.reset();
+      }catch(err){
+        // Backend didn't respond — fallback to local
+        saveToLocal(payload);
+        msg.textContent = 'Backend unavailable — saved locally (demo). Start the backend and migrate to a real DB later.';
+        msg.className = 'note';
+        form.reset();
+      }
+    });
+  </script>
+</body>
+</html>
