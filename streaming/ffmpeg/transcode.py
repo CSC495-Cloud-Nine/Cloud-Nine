@@ -1,4 +1,5 @@
 # docker run -p 9000:9000 -p 9001:9001 -e MINIO_ROOT_USER=minioadmin -e MINIO_ROOT_PASSWORD=minioadmin123 minio/minio server /data --console-address ":9001"
+# curl.exe -F "file=@\"C:\Users\jeffr\Videos\Screen Recordings\Customer Portal.mp4\"" http://localhost:8080/upload
 
 import os
 import subprocess
