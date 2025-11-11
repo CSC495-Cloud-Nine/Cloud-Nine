@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cloud9 Streaming — Our Team</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --c9-blue:#078fef;
+      --c9-deep:#0d4473;
+      --ink:#101828;
+      --muted:#667085;
+    }
+    *{box-sizing:border-box;}
+    body {
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+      color:var(--ink);
+      background-color: #000000;
+      display:flex; flex-direction:column; min-height:100vh;
+    }
+    header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:20px 40px;
+      background:#fff; border-bottom:1px solid #e6eef7;
+    }
+    header img { height:48px; }
+    nav a {
+      margin-left:20px;
+      text-decoration:none;
+      color:var(--c9-deep);
+      font-weight:600;
+      font-size:15px;
+    }
+    nav a:hover { text-decoration:underline; }
+    main {
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:60px 20px;
+    }
+    .team-container {
+      max-width:1000px;
+      width:100%;
+    }
+    .team-header {
+      text-align:center;
+      margin-bottom:50px;
+    }
+    h1 {
+      font-size:38px;
+      font-weight:800;
+      margin:0 0 16px;
+      color:var(--c9-deep);
+    }
+    .intro {
+      color:var(--muted);
+      font-size:17px;
+      margin:0 auto;
+      max-width:600px;
+    }
+    .team-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+      gap:30px;
+      margin-bottom:50px;
+    }
+    .team-card {
+      background:#fff;
+      border-radius:16px;
+      padding:30px;
+      text-align:center;
+      box-shadow:0 6px 20px rgba(13,68,115,.08);
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+    .team-card:hover {
+      transform:translateY(-5px);
+      box-shadow:0 10px 30px rgba(13,68,115,.15);
+    }
+    .avatar {
+      width:100px;
+      height:100px;
+      margin:0 auto 20px;
+      background:linear-gradient(135deg, var(--c9-blue), var(--c9-deep));
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:40px;
+      color:#fff;
+    }
+    .team-card h2 {
+      font-size:20px;
+      font-weight:700;
+      margin:0 0 8px;
+      color:var(--c9-deep);
+    }
+    .role {
+      color:var(--c9-blue);
+      font-weight:600;
+      font-size:14px;
+      margin:0 0 12px;
+    }
+    .bio {
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.6;
+      margin:0;
+    }
+    .team-values {
+      background:#fff;
+      border-radius:16px;
+      padding:40px;
+      margin-bottom:40px;
+      box-shadow:0 6px 20px rgba(13,68,115,.08);
+    }
+    .team-values h2 {
+      font-size:24px;
+      font-weight:700;
+      margin:0 0 20px;
+      color:var(--c9-deep);
+    }
+    .values-list {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+      gap:20px;
+    }
+    .value-item {
+      padding:20px;
+      background:#f7fbff;
+      border-radius:12px;
+      border-left:4px solid var(--c9-blue);
+    }
+    .value-item strong {
+      color:var(--c9-deep);
+      display:block;
+      margin-bottom:8px;
+    }
+    .value-item p {
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.6;
+    }
+    .cta-section {
+      text-align:center;
+      margin:40px 0;
+    }
+    .btn {
+      display:inline-block;
+      background:linear-gradient(180deg, #1aa0ff, var(--c9-blue));
+      color:#fff;
+      padding:14px 28px;
+      border-radius:12px;
+      font-weight:700;
+      letter-spacing:.2px;
+      text-decoration:none;
+      box-shadow:0 6px 16px rgba(22,133,214,.35);
+      transition:box-shadow .2s ease, transform .1s ease;
+    }
+    .btn:hover { box-shadow:0 8px 22px rgba(22,133,214,.45); }
+    .btn:active { transform:translateY(1px); }
+    footer {
+      text-align:center;
+      color:#98a2b3;
+      font-size:13px;
+      padding:20px;
+      background:#fff;
+      border-top:1px solid #e6eef7;
+    }
+    @media (max-width:600px){
+      header { flex-direction:column; gap:10px; text-align:center; }
+      h1{font-size:28px;}
+      .team-grid {
+        grid-template-columns:1fr;
+        gap:20px;
+      }
+      .team-values {
+        padding:20px;
+      }
+      nav a { margin-left:10px; font-size:13px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="cloud9-logo.png" alt="Cloud9 Streaming Logo" />
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="login.html">Login</a>
+      <a href="about.html">About</a>
+      <a href="team.html">Team</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="team-container">
+      <div class="team-header">
+        <h1>Meet Our Team</h1>
+        <p class="intro">Cloud9 Streaming is built by passionate developers and creators from West Chester University's Computer Science Department, dedicated to bringing the best fantasy and fandom content to fans worldwide.</p>
+      </div>
+
+      <div class="team-values">
+        <h2>Our Core Values</h2>
+        <div class="values-list">
+          <div class="value-item">
+            <strong>Innovation</strong>
+            <p>We continuously push the boundaries of streaming technology and user experience.</p>
+          </div>
+          <div class="value-item">
+            <strong>Community</strong>
+            <p>Building connections between fans and creators is at the heart of everything we do.</p>
+          </div>
+          <div class="value-item">
+            <strong>Quality</strong>
+            <p>We're committed to delivering high-quality content and seamless streaming experiences.</p>
+          </div>
+          <div class="value-item">
+            <strong>Passion</strong>
+            <p>Our team shares a deep love for fantasy, sci-fi, and nerd culture.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="avatar">👨‍💻</div>
+          <h2>Lead Developer</h2>
+          <div class="role">Full Stack Engineer</div>
+          <p class="bio">Architecting the Cloud9 platform with cutting-edge technology and user-first design principles.</p>
+        </div>
+
+        <div class="team-card">
+          <div class="avatar">👩‍💻</div>
+          <h2>UI/UX Designer</h2>
+          <div class="role">Product Designer</div>
+          <p class="bio">Creating intuitive and beautiful interfaces that bring the magic of streaming to life.</p>
+        </div>
+
+        <div class="team-card">
+          <div class="avatar">🎯</div>
+          <h2>Product Manager</h2>
+          <div class="role">Strategy Lead</div>
+          <p class="bio">Driving the vision of Cloud9 Streaming and ensuring we deliver value to our community.</p>
+        </div>
+
+        <div class="team-card">
+          <div class="avatar">🧪</div>
+          <h2>QA Engineer</h2>
+          <div class="role">Quality Assurance</div>
+          <p class="bio">Ensuring every feature works flawlessly across all devices and platforms.</p>
+        </div>
+
+        <div class="team-card">
+          <div class="avatar">📊</div>
+          <h2>Data Analyst</h2>
+          <div class="role">Analytics Specialist</div>
+          <p class="bio">Leveraging data to optimize user experiences and content recommendations.</p>
+        </div>
+
+        <div class="team-card">
+          <div class="avatar">🎨</div>
+          <h2>Content Curator</h2>
+          <div class="role">Entertainment Specialist</div>
+          <p class="bio">Hand-picking the best fantasy, sci-fi, and nerd culture content for our platform.</p>
+        </div>
+      </div>
+
+      <div class="cta-section">
+        <p style="color:var(--muted); margin-bottom:20px;">Passionate about Cloud9 Streaming? Get started today!</p>
+        <a href="login.html" class="btn">Join Us Now</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Cloud9 Streaming. All rights reserved.
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
