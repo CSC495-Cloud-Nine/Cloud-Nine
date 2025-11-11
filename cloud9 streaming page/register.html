@@ -19,6 +19,13 @@
     .brand{display:flex; gap:12px; align-items:center; padding:22px}
     .brand img{width:64px}
     h1{font-size:20px; margin:0}
+    .nav-links{
+      display:flex; gap:12px; justify-content:center; margin-top:20px; flex-wrap:wrap;
+    }
+    .nav-links a{
+      color:var(--c9-blue); text-decoration:none; font-size:13px; font-weight:600;
+    }
+    .nav-links a:hover{ text-decoration:underline; }
     .content{padding:18px 22px 28px}
     form{display:grid; gap:12px}
     .row{display:flex; gap:12px}
@@ -87,6 +94,12 @@
         </form>
         <hr style="margin:14px 0;border:none;border-top:1px solid #eef6ff">
         <div class="note">Note: This page will POST to <code>http://localhost:3000/api/register</code>. If the backend is not running, the credential will be saved to localStorage as a temporary fallback. Provide a database later and wire it up to the backend (instructions in backend/README.md).</div>
+      </div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="login.html">Sign In</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
       </div>
     </section>
   </main>

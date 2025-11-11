@@ -42,6 +42,13 @@ Place this file in the same folder as `cloud9-logo.png` and `cloud 9 home page.h
     .brand img{ width:86px; height:auto; display:block; }
     .brand h1{ margin:0; font-size:22px; font-weight:800; letter-spacing:.3px; }
     .brand .tag{ color:var(--muted); font-size:13px; margin-top:-2px; }
+    .nav-links{
+      display:flex; gap:12px; justify-content:center; margin-top:20px; flex-wrap:wrap;
+    }
+    .nav-links a{
+      color:var(--c9-blue); text-decoration:none; font-size:13px; font-weight:600;
+    }
+    .nav-links a:hover{ text-decoration:underline; }
 
     .content{ padding:20px 24px 28px; }
     form{ display:grid; gap:14px; }
@@ -119,6 +126,11 @@ Place this file in the same folder as `cloud9-logo.png` and `cloud 9 home page.h
         <div class="row" style="justify-content:center;">
           <a class="link" href="register.html" id="create">Create an account</a>
         </div>
+      </div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
       </div>
       <div class="footer">© <span id="year"></span> Cloud9 Streaming. All rights reserved.</div>
     </section>
