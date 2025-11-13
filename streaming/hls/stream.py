@@ -4,7 +4,7 @@ import boto3
 from botocore.exceptions import ClientError
 
 # Configuration
-MINIO_URL = os.getenv("MINIO_URL", "http://localhost:9000")
+MINIO_URL = os.getenv("MINIO_URL", "http://minio:9000")
 MINIO_BUCKET = os.getenv("MINIO_BUCKET", "videos")
 ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", "minioadmin")
 SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "minioadmin123")
