@@ -50,12 +50,23 @@ def upload_and_transcode():
         output_m3u8 = os.path.join(output_dir, "index.m3u8")
         cmd = [
             "ffmpeg", "-i", input_path,
-            "-codec:", "copy",
+            "-c:v", "libx264", "-preset", "veryfast", "-crf", "23",
+            "-c:a", "aac", "-b:a", "128k",
             "-start_number", "0",
             "-hls_time", "10",
             "-hls_list_size", "0",
-            "-f", "hls", output_m3u8
+            "-f", "hls",
+            output_m3u8
         ]
+
+        # cmd = [
+        #     "ffmpeg", "-i", input_path,
+        #     "-codec:", "copy",
+        #     "-start_number", "0",
+        #     "-hls_time", "10",
+        #     "-hls_list_size", "0",
+        #     "-f", "hls", output_m3u8
+        # ]
         subprocess.run(cmd, check=True)
 
         # Upload HLS files to MinIO
