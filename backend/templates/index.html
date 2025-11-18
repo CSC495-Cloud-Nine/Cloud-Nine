@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cloud9 Streaming — Contact Us</title>
+  <title>Cloud9 Streaming — Index</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -40,46 +40,30 @@
       display:flex;
       align-items:center;
       justify-content:center;
+      text-align:center;
       padding:60px 20px;
     }
-    .content {
+    .hero {
       max-width:700px;
-      background:#fff;
-      border-radius:16px;
-      padding:50px 40px;
-      box-shadow:0 10px 30px rgba(13,68,115,.08);
     }
     h1 {
-      font-size:32px;
+      font-size:38px;
       font-weight:800;
-      margin:0 0 20px;
-      color:var(--c9-deep);
-    }
-    h2 {
-      font-size:22px;
-      font-weight:700;
-      margin:30px 0 15px;
+      margin:0 0 16px;
       color:var(--c9-deep);
     }
     p {
-      color:var(--ink);
-      font-size:16px;
-      line-height:1.6;
-      margin:0 0 18px;
+      color:var(--muted);
+      font-size:17px;
+      margin:0 auto 30px;
+      max-width:540px;
     }
-    .contact-info {
-      background:#f7fbff;
-      padding:25px;
-      border-radius:12px;
-      border-left:4px solid var(--c9-blue);
-      margin:25px 0;
-    }
-    .contact-info p {
-      margin:10px 0;
-      font-size:16px;
-    }
-    .contact-info strong {
-      color:var(--c9-deep);
+    .links-container {
+      display:flex;
+      gap:20px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:30px;
     }
     .btn {
       display:inline-block;
@@ -92,11 +76,14 @@
       text-decoration:none;
       box-shadow:0 6px 16px rgba(22,133,214,.35);
       transition:box-shadow .2s ease, transform .1s ease;
-      margin-top:20px;
-      display:inline-block;
     }
     .btn:hover { box-shadow:0 8px 22px rgba(22,133,214,.45); }
     .btn:active { transform:translateY(1px); }
+    .btn-secondary {
+      background:linear-gradient(180deg, #667085, #5a6578);
+      box-shadow:0 6px 16px rgba(102,112,133,.35);
+    }
+    .btn-secondary:hover { box-shadow:0 8px 22px rgba(102,112,133,.45); }
     footer {
       text-align:center;
       color:#98a2b3;
@@ -107,53 +94,35 @@
     }
     @media (max-width:600px){
       header { flex-direction:column; gap:10px; text-align:center; }
-      h1{font-size:24px;}
-      h2{font-size:18px;}
-      .content { padding:30px 20px; }
+      h1{font-size:30px;}
+      .links-container { flex-direction:column; }
     }
   </style>
 </head>
 <body>
   <header>
-    <img src="cloud9-logo.png" alt="Cloud9 Streaming Logo" />
+    <img src="{{ url_for('static', filename='cloud9-logo.png') }}" alt="Cloud9 Streaming Logo" />
     <nav>
-      <a href="index.html">Home</a>
-      <a href="videos.html">Videos</a>
-      <a href="login.html">Login</a>
-      <a href="about.html">About</a>
-      <a href="team.html">Team</a>
-      <a href="contact.html">Contact</a>
-      <a href="legal.html">Legal</a>
+      <a href="/">Home</a>
+      <a href="/videos">Videos</a>
+      <a href="/login">Login</a>
+      <a href="/about">About</a>
+      <a href="/team">Team</a>
+      <a href="/contact">Contact</a>
+      <a href="/legal">Legal</a>
     </nav>
   </header>
 
   <main>
-    <div class="content">
-      <h1>Contact Us</h1>
-      
-      <p>Have questions or feedback about Cloud9 Streaming? We'd love to hear from you! Get in touch with our team at West Chester University's Computer Science Department.</p>
-
-      <h2>Get In Touch</h2>
-      <p>You can contact us at the West Chester University Computer Science Department.</p>
-
-      <div class="contact-info">
-        <p><strong>Department:</strong> Computer Science Department</p>
-        <p><strong>Institution:</strong> West Chester University</p>
-        <p>We're here to assist with any inquiries, feedback, or support you may need regarding Cloud9 Streaming.</p>
+    <div class="hero">
+      <h1>Cloud9 Streaming — Page Index</h1>
+      <p>Welcome to Cloud9 Streaming. Select a page below to navigate to different sections of the application.</p>
+      <div class="links-container">
+        <a href="/login" class="btn">Login</a>
+        <a href="/register" class="btn btn-secondary">Register</a>
+        <a href="/about" class="btn btn-secondary">About Us</a>
+        <a href="/contact" class="btn btn-secondary">Contact</a>
       </div>
-
-      <h2>What We Can Help With</h2>
-      <ul style="color:var(--ink); font-size:16px; line-height:1.8;">
-        <li>Technical support and troubleshooting</li>
-        <li>Account and billing inquiries</li>
-        <li>Content recommendations</li>
-        <li>Partnership and collaboration opportunities</li>
-        <li>General feedback and suggestions</li>
-      </ul>
-
-      <p style="margin-top:30px; color:var(--muted);">Thank you for being part of the Cloud9 Streaming community. We appreciate your interest and look forward to connecting with you!</p>
-
-      <a href="index.html" class="btn">Back to Home</a>
     </div>
   </main>
 

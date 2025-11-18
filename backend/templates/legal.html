@@ -141,15 +141,15 @@
 </head>
 <body>
   <header>
-    <img src="cloud9-logo.png" alt="Cloud9 Streaming Logo" />
+    <img src="{{ url_for('static', filename='cloud9-logo.png') }}" alt="Cloud9 Streaming Logo" />
     <nav>
-      <a href="index.html">Home</a>
-      <a href="videos.html">Videos</a>
-      <a href="login.html">Login</a>
-      <a href="about.html">About</a>
-      <a href="team.html">Team</a>
-      <a href="contact.html">Contact</a>
-      <a href="legal.html">Legal</a>
+      <a href="/">Home</a>
+      <a href="/videos">Videos</a>
+      <a href="/login">Login</a>
+      <a href="/about">About</a>
+      <a href="/team">Team</a>
+      <a href="/contact">Contact</a>
+      <a href="/legal">Legal</a>
     </nav>
   </header>
 
@@ -223,7 +223,7 @@
         <p>If you have any questions regarding these legal terms, please contact us through our <a href="contact.html" style="color:var(--c9-blue); text-decoration:none; font-weight:600;">Contact Us</a> page.</p>
       </div>
 
-      <a href="index.html" class="btn">Return to Home</a>
+      <a href="/" class="btn">Return to Home</a>
     </div>
   </main>
 

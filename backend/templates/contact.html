@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Cloud9 Streaming — About Us</title>
+  <title>Cloud9 Streaming — Contact Us</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -43,7 +43,7 @@
       padding:60px 20px;
     }
     .content {
-      max-width:800px;
+      max-width:700px;
       background:#fff;
       border-radius:16px;
       padding:50px 40px;
@@ -67,15 +67,19 @@
       line-height:1.6;
       margin:0 0 18px;
     }
-    ul {
-      margin:15px 0;
-      padding-left:25px;
+    .contact-info {
+      background:#f7fbff;
+      padding:25px;
+      border-radius:12px;
+      border-left:4px solid var(--c9-blue);
+      margin:25px 0;
     }
-    li {
-      color:var(--ink);
-      font-size:16px;
-      line-height:1.6;
+    .contact-info p {
       margin:10px 0;
+      font-size:16px;
+    }
+    .contact-info strong {
+      color:var(--c9-deep);
     }
     .btn {
       display:inline-block;
@@ -111,43 +115,45 @@
 </head>
 <body>
   <header>
-    <img src="cloud9-logo.png" alt="Cloud9 Streaming Logo" />
+    <img src="{{ url_for('static', filename='cloud9-logo.png') }}" alt="Cloud9 Streaming Logo" />
     <nav>
-      <a href="index.html">Home</a>
-      <a href="videos.html">Videos</a>
-      <a href="login.html">Login</a>
-      <a href="about.html">About</a>
-      <a href="team.html">Team</a>
-      <a href="contact.html">Contact</a>
-      <a href="legal.html">Legal</a>
+      <a href="/">Home</a>
+      <a href="/videos">Videos</a>
+      <a href="/login">Login</a>
+      <a href="/about">About</a>
+      <a href="/team">Team</a>
+      <a href="/contact">Contact</a>
+      <a href="/legal">Legal</a>
     </nav>
   </header>
 
   <main>
     <div class="content">
-      <h1>Cloud9 Streaming: Your Destination for Fantasy and Fandom</h1>
+      <h1>Contact Us</h1>
       
-      <p>Cloud9 Streaming is a premier digital platform dedicated to fans of fantasy, sci-fi, and classic nerd culture. We provide a one-of-a-kind streaming experience built around imagination, nostalgia, and community — bringing together fans who live for stories that transport them beyond reality.</p>
+      <p>Have questions or feedback about Cloud9 Streaming? We'd love to hear from you! Get in touch with our team at West Chester University's Computer Science Department.</p>
 
-      <h2>Our Vision</h2>
-      <p>To be the go-to destination for audiences who love the extraordinary. Cloud9 Streaming celebrates creativity and fandom by curating the best in nerd entertainment — from timeless adventures to modern cinematic universes.</p>
+      <h2>Get In Touch</h2>
+      <p>You can contact us at the West Chester University Computer Science Department.</p>
 
-      <h2>What We Offer</h2>
-      <ul>
-        <li><strong>Curated Entertainment:</strong> A carefully selected library of fantasy, science fiction, and superhero films.</li>
-        <li><strong>Interactive Experiences:</strong> Live watch parties, community discussions, and exclusive behind-the-scenes content.</li>
-        <li><strong>Personalized Viewing:</strong> Smart recommendations tailored to your favorite genres and characters.</li>
+      <div class="contact-info">
+        <p><strong>Department:</strong> Computer Science Department</p>
+        <p><strong>Institution:</strong> West Chester University</p>
+        <p>We're here to assist with any inquiries, feedback, or support you may need regarding Cloud9 Streaming.</p>
+      </div>
+
+      <h2>What We Can Help With</h2>
+      <ul style="color:var(--ink); font-size:16px; line-height:1.8;">
+        <li>Technical support and troubleshooting</li>
+        <li>Account and billing inquiries</li>
+        <li>Content recommendations</li>
+        <li>Partnership and collaboration opportunities</li>
+        <li>General feedback and suggestions</li>
       </ul>
 
-      <h2>Step Into the Magic</h2>
-      <p>For our Harry Potter fans, Cloud9 is your digital Hogwarts. Relive every spell, duel, and adventure in a world where fantasy feels real. Whether it's discovering new fan theories or revisiting the classic saga, Cloud9 keeps the magic alive for every generation.</p>
+      <p style="margin-top:30px; color:var(--muted);">Thank you for being part of the Cloud9 Streaming community. We appreciate your interest and look forward to connecting with you!</p>
 
-      <h2>Why Cloud9</h2>
-      <p>Cloud9 Streaming isn't just about watching — it's about belonging. We combine entertainment with community, offering a clean, user-friendly interface and content that connects passionate fans everywhere.</p>
-
-      <p><strong>Cloud9 Streaming — your place for streaming nerdy movies, and of course, your Harry Potter fantasy.</strong></p>
-
-      <a href="login.html" class="btn">Get Started</a>
+      <a href="/" class="btn">Back to Home</a>
     </div>
   </main>
 

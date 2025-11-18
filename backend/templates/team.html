@@ -188,16 +188,16 @@
 </head>
 <body>
   <header>
-    <img src="cloud9-logo.png" alt="Cloud9 Streaming Logo" />
-            <nav>
-              <a href="index.html">Home</a>
-              <a href="videos.html">Videos</a>
-              <a href="login.html">Login</a>
-              <a href="about.html">About</a>
-              <a href="team.html">Team</a>
-              <a href="contact.html">Contact</a>
-              <a href="legal.html">Legal</a>
-            </nav>
+    <img src="{{ url_for('static', filename='cloud9-logo.png') }}" alt="Cloud9 Streaming Logo" />
+    <nav>
+      <a href="/">Home</a>
+      <a href="/videos">Videos</a>
+      <a href="/login">Login</a>
+      <a href="/about">About</a>
+      <a href="/team">Team</a>
+      <a href="/contact">Contact</a>
+      <a href="/legal">Legal</a>
+    </nav>
   </header>
 
   <main>
@@ -275,7 +275,7 @@
 
       <div class="cta-section">
         <p style="color:var(--muted); margin-bottom:20px;">Passionate about Cloud9 Streaming? Get started today!</p>
-        <a href="login.html" class="btn">Join Us Now</a>
+        <a href="/login" class="btn">Join Us Now</a>
       </div>
     </div>
   </main>
