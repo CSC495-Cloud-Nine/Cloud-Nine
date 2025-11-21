@@ -72,10 +72,10 @@
 
   <script>
     // Example placeholder list — in production this list would be fetched from a streaming DB/API
-    const videos = [
-      { id: 'v1', title: 'The Enchanted Forest', description: 'A classic fantasy adventure.', src: 'https://storage.googleapis.com/cloud9-demo/enchanted-forest.mp4' },
-      { id: 'v2', title: 'Galactic Odyssey', description: 'A sci-fi space journey.', src: 'https://storage.googleapis.com/cloud9-demo/galactic-odyssey.mp4' },
-      { id: 'v3', title: 'Heroes & Legends', description: 'Superhero anthology.', src: 'https://storage.googleapis.com/cloud9-demo/heroes-legends.mp4' }
+    let videos = [
+    //   { id: 'v1', title: 'The Enchanted Forest', description: 'A classic fantasy adventure.', src: 'http://localhost:8081/stream/Harry/index.m3u8' },
+    //   { id: 'v2', title: 'Galactic Odyssey', description: 'A sci-fi space journey.', src: 'http://localhost:8081/stream/Helldivers/index.m3u8' },
+    //   { id: 'v3', title: 'Heroes & Legends', description: 'Superhero anthology.', src: 'https://storage.googleapis.com/cloud9-demo/heroes-legends.mp4' }
     ];
 
     const listEl = document.getElementById('videoList');
@@ -83,6 +83,37 @@
     const sourceEl = document.getElementById('videoSource');
     const titleEl = document.getElementById('playerTitle');
     const sourceUrlEl = document.getElementById('sourceUrl');
+
+    function getVideos() {
+        fetch('http://localhost:3000/getVideos')
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.text();
+            })
+            .then(data => {
+              // Split the text response into an array of folder names
+              const folders = data.split('\n').filter(name => name.trim() !== '');
+            
+              // Do something with the folders (e.g., display them)
+              folders.forEach(folder => {
+                videos.push({
+                    id: 'nothing',
+                    title: folder,
+                    description: 'A video',
+                    src: `http://localhost:8081/stream/${folder}/index.m3u8`
+                });
+              });
+
+              renderList();
+            })
+            .catch(error => {
+              console.error('Error fetching videos:', error);
+            });
+    }
+
+    getVideos();
 
     function renderList(){
       videos.forEach(v =>{
@@ -109,7 +140,6 @@
       player.play().catch(()=>{});
     }
 
-    renderList();
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
