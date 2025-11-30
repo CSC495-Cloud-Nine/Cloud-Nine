@@ -85,32 +85,35 @@
     const sourceUrlEl = document.getElementById('sourceUrl');
 
     function getVideos() {
-        fetch('http://localhost:3000/getVideos')
-            .then(response => {
-              if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-              }
-              return response.text();
-            })
-            .then(data => {
-              // Split the text response into an array of folder names
-              const folders = data.split('\n').filter(name => name.trim() !== '');
-            
-              // Do something with the folders (e.g., display them)
-              folders.forEach(folder => {
-                videos.push({
-                    id: 'nothing',
-                    title: folder,
-                    description: 'A video',
-                    src: `http://localhost:8081/stream/${folder}/index.m3u8`
-                });
-              });
+        fetch(window.location.origin + "/getVideos", {
+            method: "GET",
+            headers: {
+                "Content-type": "application/json; charset=UTF-8",
+                "Origin": window.location.origin + ""
+            }
+        }).then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                console.error("Something went wrong");
+            }
+        }).then(json => {
+            let videoList = json;
 
-              renderList();
-            })
-            .catch(error => {
-              console.error('Error fetching videos:', error);
-            });
+            for (let i = 0; i < videoList.length; i++) {
+                videos.push({
+                    id: videoList[i].id,
+                    title: videoList[i].name,
+                    description: videoList[i].description,
+                    src: `http://localhost:8081/stream/${videoList[i].video_file}/index.m3u8`
+                });
+            }
+
+            renderList();
+        }).catch(err => {
+            console.error(err);
+            err("An Error Occurred While Loading Data");
+        });
     }
 
     getVideos();

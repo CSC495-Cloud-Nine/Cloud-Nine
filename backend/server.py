@@ -1,7 +1,14 @@
+# PostgreSQL: docker run -d --name my-postgres --network appnet -e POSTGRES_USER=myuser -e POSTGRES_PASSWORD=mypass -e POSTGRES_DB=mydb -p 5433:5432 postgres:17
+# docker exec -it my-postgres psql -U myuser -d mydb
+# CREATE TABLE videos (id SERIAL PRIMARY KEY, name TEXT NOT NULL, description TEXT NOT NULL, video_file TEXT NOT NULL);
+
+
+
 import os
-from flask import Flask, Response, abort, render_template
+from flask import Flask, Response, abort, render_template, jsonify
 import boto3
 from botocore.exceptions import ClientError
+import psycopg2
 
 app = Flask(__name__)
 
@@ -21,48 +28,72 @@ s3 = boto3.client(
     aws_secret_access_key=SECRET_KEY,
 )
 
+def get_db():
+    return psycopg2.connect(
+        host="127.0.0.1",
+        database="mydb",
+        user="myuser",
+        password="mypass",
+        port=5433
+    )
+
+def query(command:str):
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute(command)
+    rows = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return rows
+
 @app.route("/getVideos")
 def getVideos():
-    """
-    Returns a plain-text list of all folder names in the bucket.
-    """
-    PREFIX = ""   # "" = list everything in the bucket. Change to "transcoded/" if needed.
+    rows = query("SELECT * FROM videos")
+    videos = [{"id": r[0], "name": r[1], "description": r[2], "video_file": r[3]} for r in rows]
+    return jsonify(videos)
 
-    try:
-        print("Starting getVideos request...")
-        print(f"Bucket: {MINIO_BUCKET}, Prefix: '{PREFIX}'")
+    # """
+    # Returns a plain-text list of all folder names in the bucket.
+    # """
+    # PREFIX = ""   # "" = list everything in the bucket. Change to "transcoded/" if needed.
+
+    # try:
+    #     print("Starting getVideos request...")
+    #     print(f"Bucket: {MINIO_BUCKET}, Prefix: '{PREFIX}'")
         
-        response = s3.list_objects_v2(Bucket=MINIO_BUCKET, Prefix=PREFIX, Delimiter='/')
+    #     response = s3.list_objects_v2(Bucket=MINIO_BUCKET, Prefix=PREFIX, Delimiter='/')
         
-        print(f"Response received. Keys: {response.keys()}")
+    #     print(f"Response received. Keys: {response.keys()}")
 
-        folders = []
+    #     folders = []
         
-        # Get folders from CommonPrefixes (these are the "directories")
-        if "CommonPrefixes" in response:
-            print(f"Found {len(response['CommonPrefixes'])} folders")
-            for prefix in response["CommonPrefixes"]:
-                folder_path = prefix["Prefix"]
-                # Remove trailing slash and get folder name
-                folder_name = folder_path.rstrip('/').split('/')[-1]
-                if folder_name:  # Only add non-empty folder names
-                    folders.append(folder_name)
-        else:
-            print("No CommonPrefixes in response")
+    #     # Get folders from CommonPrefixes (these are the "directories")
+    #     if "CommonPrefixes" in response:
+    #         print(f"Found {len(response['CommonPrefixes'])} folders")
+    #         for prefix in response["CommonPrefixes"]:
+    #             folder_path = prefix["Prefix"]
+    #             # Remove trailing slash and get folder name
+    #             folder_name = folder_path.rstrip('/').split('/')[-1]
+    #             if folder_name:  # Only add non-empty folder names
+    #                 folders.append(folder_name)
+    #     else:
+    #         print("No CommonPrefixes in response")
 
-        if not folders:
-            print("No folders found, returning empty response")
-            return Response("No folders found.", mimetype="text/plain")
+    #     if not folders:
+    #         print("No folders found, returning empty response")
+    #         return Response("No folders found.", mimetype="text/plain")
 
-        print(f"Returning {len(folders)} folders")
-        return Response("\n".join(folders), mimetype="text/plain")
+    #     print(f"Returning {len(folders)} folders")
+    #     return Response("\n".join(folders), mimetype="text/plain")
 
-    except ClientError as e:
-        print("MinIO ClientError:", e)
-        abort(500)
-    except Exception as e:
-        print("Unexpected error:", type(e).__name__, str(e))
-        abort(500)
+    # except ClientError as e:
+    #     print("MinIO ClientError:", e)
+    #     abort(500)
+    # except Exception as e:
+    #     print("Unexpected error:", type(e).__name__, str(e))
+    #     abort(500)
 
 @app.route("/")
 def home():
