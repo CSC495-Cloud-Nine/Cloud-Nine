@@ -5,7 +5,7 @@
 
 
 import os
-from flask import Flask, Response, abort, render_template, jsonify
+from flask import Flask, Response, abort, render_template, jsonify, request
 import boto3
 from botocore.exceptions import ClientError
 import psycopg2
@@ -48,7 +48,29 @@ def query(command:str):
 
     return rows
 
-@app.route("/getVideos")
+@app.route("/upload-video-details", methods=["POST"])
+def uploadVideoDetails():
+    data = request.get_json()
+
+    conn = get_db()
+    cur = conn.cursor()
+    
+    # Use parameterized query to prevent SQL injection
+    cur.execute(
+        "INSERT INTO videos (name, description, video_file) VALUES (%s, %s, %s) RETURNING id",
+        (data["title"], data["description"], data["video_file"].replace(" ", "_"))
+    )
+    
+    video_id = cur.fetchone()[0]
+    
+    conn.commit()  # Important: commit the transaction
+    
+    cur.close()
+    conn.close()
+
+    return "Video uploaded", 200
+
+@app.route("/get-videos")
 def getVideos():
     rows = query("SELECT * FROM videos")
     videos = [{"id": r[0], "name": r[1], "description": r[2], "video_file": r[3]} for r in rows]
@@ -126,6 +148,10 @@ def team():
 @app.route("/videos")
 def videos():
     return render_template("videos.html")
+
+@app.route("/upload")
+def upload():
+    return render_template("upload.html")
 
 if __name__ == "__main__":
     app.run(debug=True, port=3000)
