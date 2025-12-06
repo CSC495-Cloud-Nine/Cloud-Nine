@@ -13,7 +13,7 @@ import psycopg2
 app = Flask(__name__)
 
 # Configuration
-MINIO_URL = os.getenv("MINIO_URL", "http://localhost:9000")
+MINIO_URL = os.getenv("MINIO_URL", "http://minio:9000")
 MINIO_BUCKET = os.getenv("MINIO_BUCKET", "videos")
 ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", "minioadmin")
 SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "minioadmin123")
@@ -30,11 +30,11 @@ s3 = boto3.client(
 
 def get_db():
     return psycopg2.connect(
-        host="127.0.0.1",
+        host="my-postgres",
         database="mydb",
         user="myuser",
         password="mypass",
-        port=5433
+        port=5432
     )
 
 def query(command:str):
@@ -57,7 +57,8 @@ def uploadVideoDetails():
     
     # Use parameterized query to prevent SQL injection
     cur.execute(
-        "INSERT INTO videos (name, description, video_file) VALUES (%s, %s, %s) RETURNING id",
+        # "INSERT INTO videos (name, description, video_file) VALUES (%s, %s, %s) RETURNING id",
+        "INSERT INTO videos (name, description, video_file) VALUES (%s, %s, %s) ON CONFLICT (video_file) DO UPDATE SET name = EXCLUDED.name, description = EXCLUDED.description RETURNING id",
         (data["title"], data["description"], data["video_file"].replace(" ", "_"))
     )
     
@@ -154,4 +155,4 @@ def upload():
     return render_template("upload.html")
 
 if __name__ == "__main__":
-    app.run(debug=True, port=3000)
+    app.run(host="0.0.0.0", port=3000)

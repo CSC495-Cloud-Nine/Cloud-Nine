@@ -246,7 +246,7 @@
             console.error('Upload failed');
         });
 
-        xhr.open('POST', "http://" + window.location.hostname + ":8080/upload");
+        xhr.open('POST', window.location.origin + "/upload-video");
         xhr.setRequestHeader('Origin', window.location.origin);
         xhr.send(formData);
     }

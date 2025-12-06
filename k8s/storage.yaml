@@ -1,31 +1,98 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: minio-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi  # Adjust size as needed
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: storage-deployment
+  name: minio
+  labels:
+    app: minio
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: storage
+      app: minio
   template:
     metadata:
       labels:
-        app: storage
+        app: minio
     spec:
       containers:
-      - name: storage
-        image: busybox
-        command: ["sleep", "3600"]
+        - name: minio
+          image: minio/minio:latest
+          args:
+            - server
+            - /data
+            - --console-address
+            - ":9001"
+          env:
+            - name: MINIO_ROOT_USER
+              value: "minioadmin"
+            - name: MINIO_ROOT_PASSWORD
+              value: "minioadmin123"
+          ports:
+            - containerPort: 9000  # API
+            - containerPort: 9001  # Console
+          volumeMounts:
+            - name: minio-data
+              mountPath: /data
+          readinessProbe:
+            httpGet:
+              path: /minio/health/ready
+              port: 9000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+        
+        # Sidecar container to create bucket after MinIO starts
+        - name: bucket-creator
+          image: minio/mc:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              # Wait for MinIO to be ready
+              echo "Waiting for MinIO to start..."
+              sleep 15
+              
+              # Retry logic to handle startup delays
+              for i in $(seq 1 30); do
+                if mc alias set local http://localhost:9000 minioadmin minioadmin123; then
+                  echo "MinIO is ready!"
+                  mc mb local/videos || true
+                  echo "Bucket 'videos' created successfully"
+                  break
+                fi
+                echo "Attempt $i: MinIO not ready yet, waiting..."
+                sleep 2
+              done
+              
+              # Keep container running
+              sleep infinity
+      volumes:
+        - name: minio-data
+          persistentVolumeClaim:
+            claimName: minio-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: storage-svc
+  name: minio
 spec:
   selector:
-    app: storage
+    app: minio
   ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  clusterIP: None  
+    - name: api
+      port: 9000
+      targetPort: 9000
+    - name: console
+      port: 9001
+      targetPort: 9001
+  type: ClusterIP

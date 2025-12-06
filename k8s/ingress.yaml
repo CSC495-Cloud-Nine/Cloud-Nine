@@ -1,0 +1,170 @@
+---
+# 1️⃣ Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ingress-nginx
+---
+# 2️⃣ ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ingress-nginx
+  namespace: ingress-nginx
+---
+# 3️⃣ ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ingress-nginx
+rules:
+  # Core resources needed by controller
+  - apiGroups: [""]
+    resources: ["configmaps","endpoints","nodes","pods","secrets","services"]
+    verbs: ["get","list","watch"]
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses","ingressclasses"]
+    verbs: ["get","list","watch"]
+  - apiGroups: ["networking.k8s.io"]
+    resources: ["ingresses/status"]
+    verbs: ["update"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create","patch"]
+  - apiGroups: ["discovery.k8s.io"]
+    resources: ["endpointslices"]
+    verbs: ["get","list","watch"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get","list","watch","create","update","patch"]
+---
+# 4️⃣ ClusterRoleBinding (THIS WAS MISSING!)
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ingress-nginx
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: ingress-nginx
+subjects:
+  - kind: ServiceAccount
+    name: ingress-nginx
+    namespace: ingress-nginx
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+data:
+  proxy-body-size: "10240m"
+  proxy-read-timeout: "600"
+  proxy-send-timeout: "600"
+  proxy-request-buffering: "off"
+---
+# 5️⃣ Ingress Controller Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/component: controller
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      nodePort: 31000   # reachable at localhost:31000
+    - name: https
+      port: 443
+      targetPort: 443
+      nodePort: 31001
+---
+# 6️⃣ Ingress Controller Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ingress-nginx
+      app.kubernetes.io/component: controller
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ingress-nginx
+        app.kubernetes.io/component: controller
+    spec:
+      serviceAccountName: ingress-nginx
+      containers:
+        - name: controller
+          image: registry.k8s.io/ingress-nginx/controller:v1.13.0
+          args:
+            - /nginx-ingress-controller
+            - --controller-class=k8s.io/ingress-nginx
+            - --configmap=$(POD_NAMESPACE)/ingress-nginx-controller
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          ports:
+            - containerPort: 80
+              name: http
+            - containerPort: 443
+              name: https
+---
+# 7️⃣ IngressClass (Required for Kubernetes 1.18+)
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: nginx
+spec:
+  controller: k8s.io/ingress-nginx
+---
+# 8️⃣ Example Ingress (routes to default namespace services)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-ingress
+  namespace: default  # Changed to default since services are in default namespace
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          # Upload routes → streaming-service port 8080
+          - path: /upload-video
+            pathType: Prefix
+            backend:
+              service:
+                name: streaming-service
+                port:
+                  number: 8080
+          # Stream routes → streaming-service port 8081
+          - path: /stream
+            pathType: Prefix
+            backend:
+              service:
+                name: streaming-service
+                port:
+                  number: 8081
+          # Catch-all → backend (NO rewrite - passes path as-is)
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 80

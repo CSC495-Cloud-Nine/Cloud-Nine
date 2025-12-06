@@ -7,6 +7,7 @@ import boto3
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 import tempfile
+from flask_cors import CORS
 
 # Configuration
 MINIO_URL = os.getenv("MINIO_URL", "http://minio:9000")
@@ -16,6 +17,9 @@ SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "minioadmin123")
 
 # Initialize Flask app
 app = Flask(__name__)
+# CORS(app, origins=["http://localhost:3000"])
+
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024 * 1024
 
 # Initialize S3 client (MinIO)
 s3 = boto3.client(
@@ -25,7 +29,7 @@ s3 = boto3.client(
     aws_secret_access_key=SECRET_KEY,
 )
 
-@app.route("/upload", methods=["POST"])
+@app.route("/upload-video", methods=["POST"])
 def upload_and_transcode():
     """Upload a video, transcode it to HLS, and upload to MinIO."""
     if "file" not in request.files:
