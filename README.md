@@ -24,7 +24,7 @@ To install Cloud Nine, simply clone this repository
 The Kubernetes command-line tool [kubectl](https://kubernetes.io/docs/tasks/tools/) is required to run Cloud Nine
 ## Deployment
 
-To deploy this Cloud Nine run the following in the Cloud Nine directory
+To deploy Cloud Nine run the following in the Cloud Nine directory
 
 ```bash
   kubectl apply -f ./k8s
