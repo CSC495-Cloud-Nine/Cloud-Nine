@@ -60,7 +60,7 @@ spec:
               command:
                 - pg_isready
                 - -U
-                - admin
+                - myuser
             initialDelaySeconds: 10
             periodSeconds: 5
           livenessProbe:
@@ -68,7 +68,7 @@ spec:
               command:
                 - pg_isready
                 - -U
-                - admin
+                - myuser
             initialDelaySeconds: 30
             periodSeconds: 10
       volumes:
