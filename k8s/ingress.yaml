@@ -1,18 +1,18 @@
 ---
-# 1️⃣ Namespace
+# Namespace
 apiVersion: v1
 kind: Namespace
 metadata:
   name: ingress-nginx
 ---
-# 2️⃣ ServiceAccount
+# ServiceAccount
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: ingress-nginx
   namespace: ingress-nginx
 ---
-# 3️⃣ ClusterRole
+# ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -38,7 +38,7 @@ rules:
     resources: ["leases"]
     verbs: ["get","list","watch","create","update","patch"]
 ---
-# 4️⃣ ClusterRoleBinding (THIS WAS MISSING!)
+# ClusterRoleBinding (THIS WAS MISSING!)
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -63,7 +63,7 @@ data:
   proxy-send-timeout: "600"
   proxy-request-buffering: "off"
 ---
-# 5️⃣ Ingress Controller Service
+# Ingress Controller Service
 apiVersion: v1
 kind: Service
 metadata:
@@ -84,7 +84,7 @@ spec:
       targetPort: 443
       nodePort: 31001
 ---
-# 6️⃣ Ingress Controller Deployment
+# Ingress Controller Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -125,7 +125,7 @@ spec:
             - containerPort: 443
               name: https
 ---
-# 7️⃣ IngressClass (Required for Kubernetes 1.18+)
+# IngressClass (Required for Kubernetes 1.18+)
 apiVersion: networking.k8s.io/v1
 kind: IngressClass
 metadata:
@@ -133,7 +133,7 @@ metadata:
 spec:
   controller: k8s.io/ingress-nginx
 ---
-# 8️⃣ Example Ingress (routes to default namespace services)
+# Example Ingress (routes to default namespace services)
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
